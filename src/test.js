@@ -1,12 +1,23 @@
 import Tokenizer from "./tokenizer.js";
+import ExpressionParser from "./expressionParser.js";
 
-function testTokenizer(input, tokenizerClass) {
-  const tokenizer = new tokenizerClass(input);
+function testExpressionParser(input) {
+  console.log(`\nParsing: "${input}"`);
+
+  // Step 1: Tokenize
+  const tokenizer = new Tokenizer(input);
   const tokens = tokenizer.tokenize();
-  console.log("Result:", tokens.map((t) => t.toString()).join(" "));
-  return tokens;
+  // console.log("Tokens:", tokens.map((t) => t.toString()).join(" "));
+
+  // Step 2: Parse
+  const parser = new ExpressionParser(tokens);
+  const ast = parser.expression();
+  console.log("AST:");
+  console.log(ast.toString());
+
+  return ast;
 }
 
-testTokenizer("let x = 5;", Tokenizer);
-testTokenizer("function add(a, b) { return a + b; }", Tokenizer);
-testTokenizer('if (x == 5) { print("hello"); }', Tokenizer);
+testExpressionParser("3 / 4");
+testExpressionParser("3 + 4 * 2"); // Should show * has higher precedence
+testExpressionParser("(3 + 4) * 2");
